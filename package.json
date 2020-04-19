@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "nodemon . --ext ts --exec \"mocha -r ts-node/register test/**/*.test.ts\"",
     "test-dev": "nodemon --watch . --ext ts --exec \"mocha -r ts-node/register test/**/*.test.ts\""
   },
   "repository": {
