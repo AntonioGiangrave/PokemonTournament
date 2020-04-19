@@ -10,40 +10,40 @@ export class PokemonService {
 
   /**
    *
-   * get all pokemon from db
+   * get all teams from db
    *
    * @param req
    * @param res
    */
-  public getAllPokemon(req: Request, res: Response) {
-    Pokemon.find({}, (error: Error, pokemon: MongooseDocument) => {
+  public getTeams(req: Request, res: Response) {
+    Team.find({}, (error: Error, teams: MongooseDocument) => {
       if (error) {
         res.send(error);
       }
-      res.json(pokemon);
+      res.json(teams);
     });
   }
 
   /**
    *
-   * get one pokemon from db from Id
+   * get one team from db by Id
    *
    * @param req
    * @param res
    */
-  public getOnePokemon(req: Request, res: Response) {
-    const pokemonId = req.params.id;
-    Pokemon.findById(pokemonId, (error: Error, pokemon: MongooseDocument) => {
+  public getTeamById(req: Request, res: Response) {
+    const teamId = req.params.id;
+    Team.findById(teamId, (error: Error, team: MongooseDocument) => {
       if (error) {
         res.send(error);
       }
-      res.json(pokemon);
+      res.json(team);
     });
   }
 
   /**
    *
-   * add new pokemon
+   * add new team
    *
    * @param req
    * @param res
@@ -60,54 +60,37 @@ export class PokemonService {
 
   /**
    *
-   * add new pokemon
+   * delete team by id
    *
    * @param req
    * @param res
    */
-  public addNewPokemon(req: Request, res: Response) {
-    const newPokemon = new Pokemon(req.body);
-    newPokemon.save((error: Error, pokemon: MongooseDocument) => {
+  public deleteTeam(req: Request, res: Response) {
+    const teamId = req.params.id;
+
+    Team.findByIdAndDelete(teamId, (error: Error, deleted: any) => {
       if (error) {
         res.send(error);
       }
-      res.json(pokemon);
-    });
-  }
-
-  /**
-   *
-   * delete pokemon
-   *
-   * @param req
-   * @param res
-   */
-  public deletePokemon(req: Request, res: Response) {
-    const pokemonId = req.params.id;
-
-    Pokemon.findByIdAndDelete(pokemonId, (error: Error, deleted: any) => {
-      if (error) {
-        res.send(error);
-      }
-      const message = deleted ? 'Deleted successfully' : 'Pokemon not found :(';
+      const message = deleted ? 'Deleted successfully' : 'Team not found :(';
       res.send(message);
     });
   }
 
   /**
    *
-   * update a pokemon
+   * update a team by id
    *
    * @param req
    * @param res
    */
-  public updatePokemon(req: Request, res: Response) {
-    const pokemonId = req.params.id;
-    Pokemon.findByIdAndUpdate(pokemonId, req.body, (error: Error, pokemon: any) => {
+  public updateTeam(req: Request, res: Response) {
+    const teamId = req.params.id;
+    Team.findByIdAndUpdate(teamId, req.body, (error: Error, team: any) => {
       if (error) {
         res.send(error);
       }
-      const message = pokemon ? 'Updated successfully' : 'Pokemon not found :(';
+      const message = team ? 'Updated successfully' : 'Team not found :(';
       res.send(message);
     });
   }

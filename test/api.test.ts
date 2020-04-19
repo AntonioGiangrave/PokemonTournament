@@ -20,7 +20,6 @@ describe('Endpoints', () => {
       images: ['img1', 'img2'],
       abilities: ['abilitiy1', 'ability2'],
       types: ['type1', 'type2'],
-      value: 'uaooa',
     };
 
     const res = await request(app)
