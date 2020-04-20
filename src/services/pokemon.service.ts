@@ -1,12 +1,20 @@
 import { Request, Response } from 'express';
 import { WELCOME_MESSAGE } from '../constants/api.constants';
-import { Pokemon } from '../model/pokemon.model';
 import { MongooseDocument } from 'mongoose';
 import { Team } from '../model/team.model';
+
+const asyncRedis = require('async-redis');
+const client = asyncRedis.createClient();
+
+client.on('error', function(error: Error) {
+  console.error(error);
+});
+
 export class PokemonService {
-  public welcomeMessage(req: Request, res: Response) {
+  welcomeMessage = async (req: Request, res: Response) => {
+    await client.flushall();
     return res.status(200).send(WELCOME_MESSAGE);
-  }
+  };
 
   /**
    *
@@ -15,14 +23,23 @@ export class PokemonService {
    * @param req
    * @param res
    */
-  public getTeams(req: Request, res: Response) {
-    Team.find({}, (error: Error, teams: MongooseDocument) => {
+  getTeams = async (req: Request, res: Response) => {
+    const cache = await client.get('teams');
+
+    if (cache) {
+      return res.send(cache);
+    }
+
+    Team.find({}, async (error: Error, teams: MongooseDocument) => {
       if (error) {
         res.send(error);
       }
-      res.json(teams);
+
+      await client.set('teams', JSON.stringify(teams));
+
+      return res.json(teams);
     });
-  }
+  };
 
   /**
    *
@@ -31,15 +48,27 @@ export class PokemonService {
    * @param req
    * @param res
    */
-  public getTeamById(req: Request, res: Response) {
+  getTeamById = async (req: Request, res: Response) => {
     const teamId = req.params.id;
-    Team.findById(teamId, (error: Error, team: MongooseDocument) => {
+
+    const cache = await client.get(teamId);
+
+    if (cache) {
+      return res.send(cache).end();
+    }
+
+    await client.del(teamId);
+
+    Team.findById(teamId, async (error: Error, team: MongooseDocument) => {
       if (error) {
-        res.send(error);
+        return res.send(error);
       }
-      res.json(team);
+
+      await client.set(teamId, JSON.stringify(team));
+
+      return res.json(team);
     });
-  }
+  };
 
   /**
    *
@@ -48,15 +77,19 @@ export class PokemonService {
    * @param req
    * @param res
    */
-  public addNewTeam(req: Request, res: Response) {
+  addNewTeam = async (req: Request, res: Response) => {
+    await client.del('teams');
+
     const newTeam = new Team(req.body);
-    newTeam.save((error: Error, team: MongooseDocument) => {
+
+    newTeam.save(async (error: Error, team: MongooseDocument) => {
       if (error) {
-        res.send(error);
+        return res.send(error);
       }
-      res.json(team);
+
+      return res.json(team);
     });
-  }
+  };
 
   /**
    *
@@ -65,17 +98,21 @@ export class PokemonService {
    * @param req
    * @param res
    */
-  public deleteTeam(req: Request, res: Response) {
+  deleteTeam = async (req: Request, res: Response) => {
     const teamId = req.params.id;
+
+    await client.del('teams');
+
+    await client.del(teamId);
 
     Team.findByIdAndDelete(teamId, (error: Error, deleted: any) => {
       if (error) {
-        res.send(error);
+        return res.send(error);
       }
       const message = deleted ? 'Deleted successfully' : 'Team not found :(';
-      res.send(message);
+      return res.send(message);
     });
-  }
+  };
 
   /**
    *
@@ -84,14 +121,17 @@ export class PokemonService {
    * @param req
    * @param res
    */
-  public updateTeam(req: Request, res: Response) {
+  updateTeam = async (req: Request, res: Response) => {
+    await client.del('teams');
+
     const teamId = req.params.id;
+
     Team.findByIdAndUpdate(teamId, req.body, (error: Error, team: any) => {
       if (error) {
         res.send(error);
       }
       const message = team ? 'Updated successfully' : 'Team not found :(';
-      res.send(message);
+      return res.send(message);
     });
-  }
+  };
 }

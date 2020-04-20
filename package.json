@@ -5,8 +5,12 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon",
-    "test": "nodemon . --ext ts --exec \"mocha -r ts-node/register test/**/*.test.ts\"",
-    "test-dev": "nodemon --watch . --ext ts --exec \"mocha -r ts-node/register test/**/*.test.ts\""
+    "clean": "rm -rf ./dist",
+    "build": "tsc",
+    "build-watch": "tsc -w",
+    "run": "nodemon ./dist/server.js",
+    "dev": "concurrently  \"npm:build-watch\" \"npm:run\"",
+    "test": "nodemon . --ext ts --exec \"mocha -r ts-node/register test/**/*.test.ts\""
   },
   "repository": {
     "type": "git",
@@ -19,10 +23,15 @@
   },
   "homepage": "https://gitlab.com/tony41/pokemon#readme",
   "dependencies": {
+    "@types/bluebird": "^3.5.30",
+    "@types/redis": "^2.8.18",
+    "async-redis": "^1.1.7",
+    "bluebird": "^3.7.2",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mongoose": "^5.9.9"
+    "mongoose": "^5.9.9",
+    "redis": "^3.0.2"
   },
   "devDependencies": {
     "@types/body-parser": "^1.19.0",

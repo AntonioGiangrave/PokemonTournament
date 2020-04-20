@@ -19,5 +19,7 @@ export class Controller {
     this.app.route('/team/:id').get(this.pokemonService.getTeamById)
 
     this.app.route('/team/:id/edit').put(this.pokemonService.updateTeam)
+
   }
+
 }
