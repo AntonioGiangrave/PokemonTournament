@@ -1,5 +1,6 @@
 import { Application } from 'express';
 import { PokemonService } from './services/pokemon.service';
+import { imageMiddleware } from './middleware/images.middleware';
 
 export class Controller {
   private pokemonService: PokemonService;
@@ -10,16 +11,14 @@ export class Controller {
   }
 
   public routes() {
-    this.app.route('/').get(this.pokemonService.welcomeMessage);
+    this.app.get('/', this.pokemonService.welcomeMessage);
 
-    this.app.route('/team/list').get(this.pokemonService.getTeams)
+    this.app.get('/team/list', this.pokemonService.getTeams);
 
-    this.app.route('/team/create').post(this.pokemonService.addNewTeam);
+    this.app.post('/team/create', imageMiddleware, this.pokemonService.addNewTeam);
 
-    this.app.route('/team/:id').get(this.pokemonService.getTeamById)
+    this.app.get('/team/:id', this.pokemonService.getTeamById);
 
-    this.app.route('/team/:id/edit').put(this.pokemonService.updateTeam)
-
+    this.app.put('/team/:id/edit', imageMiddleware, this.pokemonService.updateTeam);
   }
-
 }
