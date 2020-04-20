@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { WELCOME_MESSAGE } from '../constants/api.constants';
 import { MongooseDocument } from 'mongoose';
 import { Team } from '../model/team.model';
+import { fetchImage } from '../lib/lib.images';
 
 const asyncRedis = require('async-redis');
 const client = asyncRedis.createClient();
@@ -80,7 +81,19 @@ export class PokemonService {
   addNewTeam = async (req: Request, res: Response) => {
     await client.del('teams');
 
-    const newTeam = new Team(req.body);
+    let requestTeam = req.body;
+
+    requestTeam.pokemons.map(async (p: any) => {
+      const fileName = p.image.split('/').pop();
+
+      fetchImage(p.image, fileName);
+
+      p.image = fileName;
+
+      return p;
+    });
+
+    const newTeam = new Team(requestTeam);
 
     newTeam.save(async (error: Error, team: MongooseDocument) => {
       if (error) {

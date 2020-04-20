@@ -1,11 +1,12 @@
 import mongoose from 'mongoose';
+import { any } from 'bluebird';
 
 const Schema = mongoose.Schema;
 
 export const pokemonSchema = new Schema({
   name: String,
   base_experience: Number,
-  images: [String],
+  image: String,
   abilities: [String],
   types: [String],
 });

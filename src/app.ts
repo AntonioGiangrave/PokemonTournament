@@ -6,7 +6,6 @@ import cors from 'cors';
 import { Controller } from './main.controller';
 import mongoose from 'mongoose';
 import { MONGO_URL } from './constants/api.constants';
-import redis from 'redis';
 
 class App {
   public app: Application;
@@ -18,7 +17,6 @@ class App {
     this.setConfig();
     this.pokemonController = new Controller(this.app);
     this.setMongoConfig();
-    // this.setRedis();
   }
 
   private setConfig() {
