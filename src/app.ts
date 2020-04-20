@@ -5,7 +5,9 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import { Controller } from './main.controller';
 import mongoose from 'mongoose';
-import { MONGO_URL } from './constants/api.constants';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 class App {
   public app: Application;
@@ -27,11 +29,11 @@ class App {
 
   private setMongoConfig() {
     mongoose.Promise = global.Promise;
-    mongoose.connect(MONGO_URL, {
+    const mongoUrl = `mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_COLLECTION}`;
+    mongoose.connect(mongoUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
   }
-
 }
 export default new App().app;

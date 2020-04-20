@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { WELCOME_MESSAGE } from '../constants/api.constants';
 import { MongooseDocument } from 'mongoose';
 import { Team } from '../model/team.model';
 
@@ -13,7 +12,7 @@ client.on('error', function(error: Error) {
 export class PokemonService {
   welcomeMessage = async (req: Request, res: Response) => {
     await client.flushall();
-    return res.status(200).send(WELCOME_MESSAGE);
+    return res.status(200).send(process.env.APP_NAME);
   };
 
   /**
@@ -79,7 +78,7 @@ export class PokemonService {
    */
   addNewTeam = async (req: Request, res: Response) => {
     await client.del('teams');
-    
+
     const newTeam = new Team(req.body);
 
     newTeam.save(async (error: Error, team: MongooseDocument) => {

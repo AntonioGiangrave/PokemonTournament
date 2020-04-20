@@ -3,7 +3,7 @@ import Path from 'path';
 import Axios from 'axios';
 
 export const fetchImage = async (url: string, filename: string) => {
-  const path = Path.resolve('./images/', filename);
+  const path = Path.resolve(`${process.env.IMAGES_PATH}`, filename);
 
   if (Fs.existsSync(path)) {
     return;

@@ -4,7 +4,7 @@ services:
     image: redis:alpine
     container_name: snce-redis
     ports:
-      - '6379:6379'
+      - '${REDIS_PORT}:${REDIS_PORT}'
 
   mongodb:
     container_name: snce-mongoDB
@@ -15,22 +15,7 @@ services:
     environment:
       - MONGO_INITDB_DATABASE= Pokemon
     ports:
-      - 27017:27017
-
-  # mysql:
-  #   image: mysql:${DB_VERSION}
-  #   container_name: snce-docker-mysql
-  #   volumes:
-  #     - .${DB_DATA}:/var/lib/mysql:cached
-  #     - ./docker-config/mysql:/etc/mysql/conf.d
-  #   environment:
-  #     - MYSQL_DATABASE=${DB_DATABASE}
-  #     - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
-  #     - MYSQL_USER=${DB_USERNAME}
-  #     - MYSQL_PASSWORD=${DB_PASSWORD}
-  #   ports:
-  #     - '${DB_PORT}:3306'
-
+      - ${MONGO_PORT}:${MONGO_PORT}
   # webserver:
   #   image: nginx:alpine
   #   container_name: snce-docker-webserver
@@ -44,25 +29,3 @@ services:
   #     - '8080:80'
   #   links:
   #     - php-fpm
-
-  # php-fpm:
-  #   build:
-  #     context: ./docker-config/php-fpm
-  #     args:
-  #       - xdebug=${XDEBUG}
-  #   container_name: snce-docker-php-fpm
-  #   working_dir: /application
-  #   environment:
-  #     SYMFONY_ENV: ${SYMFONY_ENV}
-  #     XDEBUG: ${XDEBUG}
-  #     XDEBUG_HOST: ${XDEBUG_HOST}
-  #     PHP_TIMEZONE: ${PHP_TIMEZONE}
-  #     PHP_DISPLAY_ERRORS: ${PHP_DISPLAY_ERRORS}
-  #   volumes:
-  #     - .:/application:cached
-  #     - ./docker-config/php-fpm/php-ini-overrides.ini:/usr/local/etc/php/conf.d/98-overrides.ini
-  #     - ./docker-config/php-fpm/www-custom.conf:/usr/local/etc/php-fpm.d/www-custom.conf
-
-  #   links:
-  #     - mysql
-  #     - redis
