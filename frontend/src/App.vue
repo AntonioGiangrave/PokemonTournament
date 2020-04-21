@@ -1,5 +1,5 @@
 <template>
-  <v-app id="app" light>
+  <v-app id="app" dark>
     <v-toolbar>
       <v-toolbar-title>snce - pokemon tournament</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -29,6 +29,10 @@
     </v-content>
   </v-app>
 </template>
+<style lang="sass">
+.v-toolbar
+  flex: none !important
+</style>
 
 <script>
 export default {
