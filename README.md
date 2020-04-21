@@ -1,13 +1,22 @@
-# pokemon 
+# Pokemon tournament
 
-## frontend setup
+**Backend:** NodeJs + MongoDB + Redis + Mocha / Chai + Axios
+
+**Frontend:** Vue + Vuetify + Vuex + VueRouter
+
+**Docker infrastructure**: Frontend, Backend, MongoDB, Redis
+
+The repository contains backend, frontend and the Docker configuration.
+I chose to keep them all in the same project and git for convenience. I would manage a real project by keeping the projects separate.
+
+## Frontend setup
 ```
 cd frontend
 npm i 
 npm run build
 ```
 
-## backend setup
+## Backend setup
 ```
 cd backend
 npm i 
@@ -24,7 +33,7 @@ or
 docker-compose -f docker-compose.yml up 
 
 ```
- go to http://tet.snce.it:8080 or http://127.0.0.1:8080 
+ go to **http://tet.snce.it:8080** or **http://127.0.0.1:8080** 
 
 
 ### Test
