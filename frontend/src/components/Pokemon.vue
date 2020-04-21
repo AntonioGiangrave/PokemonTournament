@@ -7,22 +7,24 @@
         class="grey darken-4"
         transition="fade-transition"
       ></v-img>
-      <v-card-title class="name align-self-center">-name-</v-card-title>
+      <div class="d-flex align-center flex-column name py-2">{{pokemon.name}}</div>
     </v-card>
   </v-layout>
 </template>
 
 <style lang="sass">
 .pokemon
-  max-width : 100px
+  width : 100px
+  flex: none !important
 
 .name
-  font-size: 15px 
+  font-size: 12px 
 </style>
 <script>
 export default {
-  name: "Pokemon"
+  name: "Pokemon",
 
-  // data: () => {}
+  props: ["pokemon"],
+
 };
 </script>
