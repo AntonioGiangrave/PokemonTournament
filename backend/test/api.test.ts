@@ -13,7 +13,7 @@ describe('Endpoints', () => {
     expect(res.text).to.equal('SNCE');
   });
 
-  it('POST valid data return saved document  ', async function() {
+  it('POST valid data return saved document', async function() {
     const mock = {
       name: 'TeamTony',
       create_at: '2020-04-01',
@@ -21,14 +21,14 @@ describe('Endpoints', () => {
         {
           name: 'bulbasaur-test',
           base_experience: 80,
-          images: 'img1',
+          image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10.png',
           abilities: ['abilitiy1', 'ability2'],
           types: ['type1', 'type2'],
         },
         {
           name: 'ditto-test',
           base_experience: 100,
-          images: 'img3',
+          image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/11.png',
           abilities: ['abilitiy1', 'ability3'],
           types: ['type1', 'type2'],
         },

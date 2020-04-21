@@ -7,7 +7,7 @@ export const imageMiddleware = (req: Request, res: Response, next: any) => {
   requestTeam.pokemons.map(async (p: any) => {
     const fileName = p.image.split('/').pop();
 
-    fetchImage(p.image, fileName);
+    await fetchImage(p.image, fileName);
 
     p.image = fileName;
 
