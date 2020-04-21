@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <h1>TeamList</h1>
-    <Team v-for="n in 8" :key="n"/>
+    <Team v-for="team in teams" :key="team.id" :team="team" />
   </v-container>
 </template>
 
@@ -11,7 +11,14 @@ import Team from "./Team";
 export default {
   name: "TeamList",
 
-  // data: () => {},
+  mounted() {
+    this.$store.dispatch("getTeams");
+  },
+  computed: {
+    teams() {
+      return this.$store.getters.getTeams;
+    }
+  },
   components: {
     Team
   }

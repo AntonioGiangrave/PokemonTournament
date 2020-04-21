@@ -7,7 +7,7 @@
         class="grey darken-4"
         transition="fade-transition"
       ></v-img>
-      <v-text class="name align-self-center">-name-</v-text>
+      <v-card-title class="name align-self-center">-name-</v-card-title>
     </v-card>
   </v-layout>
 </template>
