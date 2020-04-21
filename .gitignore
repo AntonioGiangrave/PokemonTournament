@@ -7,4 +7,6 @@ backend/*.png
 
 frontend/node_modules
 
-pokeData
+pokeData/*
+
+.vscode
