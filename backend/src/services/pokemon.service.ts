@@ -3,9 +3,11 @@ import { MongooseDocument } from 'mongoose';
 import { Team } from '../model/team.model';
 
 const asyncRedis = require('async-redis');
-const client = asyncRedis.createClient();
+const client = asyncRedis.createClient(`redis://redis:6379`);
+// const client = asyncRedis.createClient();
 
 client.on('error', function(error: Error) {
+  console.log('HOST====>', process.env.REDIS_HOST);
   console.error(error);
 });
 
@@ -29,15 +31,17 @@ export class PokemonService {
       return res.send(cache);
     }
 
-    Team.find({}, async (error: Error, teams: MongooseDocument) => {
-      if (error) {
-        res.send(error);
-      }
+    Team.find({})
+      .sort('-created_at')
+      .exec(async (error: Error, teams: MongooseDocument) => {
+        if (error) {
+          res.send(error);
+        }
 
-      await client.set('teams', JSON.stringify(teams));
+        await client.set('teams', JSON.stringify(teams));
 
-      return res.json(teams);
-    });
+        return res.json(teams);
+      });
   };
 
   /**

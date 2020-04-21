@@ -30,6 +30,7 @@ class App {
   private setMongoConfig() {
     mongoose.Promise = global.Promise;
     const mongoUrl = `mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_COLLECTION}`;
+    // const mongoUrl = `mongodb://mongodb:27017/Pokemon`;
     mongoose.connect(mongoUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,

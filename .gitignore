@@ -3,7 +3,7 @@ backend/node_modules
 backend/package-lock.json
 backend/dist
 backend/.vscode
-
+backend/*.png
 
 frontend/node_modules
 

@@ -7,6 +7,10 @@ docker_up:
 	make docker_down
 	docker-compose -f docker-compose.yml up
 
+docker_up_build:
+	make docker_down
+	docker-compose -f docker-compose.yml up --build
+
 docker_up_detached:
 	make docker_down
 	docker-compose -f docker-compose.yml up -d

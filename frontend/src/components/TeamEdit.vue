@@ -1,51 +1,27 @@
 <template>
-  <v-container class="d-flex  flex-column justify-start justify-space-between">
+  <v-container class="d-flex flex-column justify-start justify-space-between">
     <h2>{{ count }} pokemons available</h2>
 
-    <v-row>
-      <Pokemon
-        v-for="pokemon in pokemons"
-        :key="pokemon.name"
-        :pokemon="pokemon"
-      />
-    </v-row>
+    <v-divider class="my-5"></v-divider>
 
+    <v-form ref="form" max-width="1000" v-model="valid" lazy-validation>
+      <v-text-field v-model="name" :counter="50" :rules="nameRules" label="Team Name" required></v-text-field>
+
+      <v-btn color="success" class="mr-4" @click="getRandomPokemon">Gotta Catch 'Em All</v-btn>
+
+      <v-btn color="success" @click="postPokemon">Save teams</v-btn>
+    </v-form>
     <v-divider></v-divider>
 
-    <v-form ref="form" v-model="valid" lazy-validation>
-      <v-text-field
-        v-model="name"
-        :counter="10"
-        :rules="nameRules"
-        label="Team Name"
-        required
-      ></v-text-field>
-
-      <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">
-        Validate
-      </v-btn>
-
-      <v-btn color="error" class="mr-4" @click="reset">
-        Reset Form
-      </v-btn>
-
-      <v-btn color="warning" @click="resetValidation">
-        Reset Validation
-      </v-btn>
-
-      <v-btn color="success" @click="getPokemon">
-        Gotta Catch 'Em All
-      </v-btn>
-
-      <v-btn color="success" @click="postPokemon">
-        Save teams
-      </v-btn>
-    </v-form>
+    <v-row class="mt-8">
+      <Pokemon v-for="pokemon in pokemons" :key="pokemon.name" :pokemon="pokemon" />
+    </v-row>
   </v-container>
 </template>
 
 <script>
 import axios from "axios";
+import http from "../http-common";
 import Pokemon from "./Pokemon";
 
 export default {
@@ -54,7 +30,7 @@ export default {
     name: "",
     nameRules: [
       v => !!v || "Name is required",
-      v => (v && v.length <= 10) || "Name must be less than 10 characters"
+      v => (v && v.length <= 50) || "Name must be less than 50 characters"
     ],
     count: 0,
     pokemons: []
@@ -68,13 +44,7 @@ export default {
     validate() {
       this.$refs.form.validate();
     },
-    reset() {
-      this.$refs.form.reset();
-    },
-    resetValidation() {
-      this.$refs.form.resetValidation();
-    },
-    getPokemon() {
+    getRandomPokemon() {
       let rnd = Math.floor(Math.random() * this.count);
       console.log("getPokemon -> rnd", rnd);
 
@@ -97,17 +67,38 @@ export default {
     },
     postPokemon() {
       let team = {
+        _id: this.$route.params.id,
         name: this.name,
-        pokemons: this.pokemons
+        pokemons: this.pokemons,
+        created_at: new Date()
       };
-      this.$store.dispatch("postTeam", team);
+
+      console.log(team);
+      this.$route.params.id
+        ? this.$store.dispatch("updateTeam", team)
+        : this.$store.dispatch("postTeam", team);
+    },
+    getTeam() {
+      const uri = `/team/${this.$route.params.id}`;
+      http
+        .get(uri)
+        .then(response => {
+          this.name = response.data.name;
+          this.pokemons = response.data.pokemons;
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   },
 
   mounted() {
+    this.$route.params.id ? this.getTeam() : (this.pokemons = []);
+
     axios
       .get("https://pokeapi.co/api/v2/pokemon")
       .then(response => (this.count = response.data.count));
-  }
+  },
+  
 };
 </script>

@@ -12,12 +12,6 @@ export default {
   getters: {
     getTeams(state) {
       return state.teams;
-    },
-    getVouchers(state) {
-      return state.vouchers;
-    },
-    getCurrentCompany(state) {
-      return state.currentCompany;
     }
   },
 
@@ -38,42 +32,25 @@ export default {
 
       http
         .post(uri, team)
-        .then(response => {
-          console.log("postTeam -> response", response);
+        .then(() => {
+          router.push("/");
+        })
+        .catch(error => {
+          console.log(error, context);
+        });
+    },
+    updateTeam(context, team) {
+      const uri = `/team/${team._id}/edit`;
+
+      http
+        .put(uri, team)
+        .then(() => {
           router.push("/");
         })
         .catch(error => {
           console.log(error, context);
         });
     }
-    // getCompanyVouchers(context, companyId) {
-    //   context.commit("vouchers", []);
-
-    //   const uri = `/vouchers/${companyId}`;
-
-    //   http
-    //     .get(uri)
-    //     .then(response => {
-    //       context.commit("vouchers", response.data.vouchers);
-    //       context.commit("currentCompany", response.data.ragioneSociale);
-    //     })
-    //     .catch(error => {
-    //       console.log(error);
-    //     });
-    // },
-    // getVouchers(context) {
-    //   context.commit("vouchers", []);
-    //   const uri = `/vouchers`;
-
-    //   http
-    //     .get(uri)
-    //     .then(response => {
-    //       context.commit("vouchers", response.data);
-    //     })
-    //     .catch(error => {
-    //       console.log(error);
-    //     });
-    // }
   },
 
   mutations: {

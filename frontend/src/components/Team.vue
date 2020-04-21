@@ -1,31 +1,35 @@
 <template>
-  <v-card class="mx-auto ma-2" max-width="1000" outlined>
-    <v-list-item three-line>
-      <v-list-item-content>
-        <div class="d-flex align-end flex-column">Pokemons team</div>
-        <v-list-item-title class="headline mb-1">{{
-          team.name
-        }}</v-list-item-title>
+  <transition name="slide-fade">
+    <v-card class="mx-auto ma-2" max-width="1000" outlined>
+      <v-list-item three-line>
+        <v-list-item-content>
+          <div class="d-flex align-end flex-column">Pokemons team</div>
+          <v-list-item-title class="headline mb-1">{{
+            team.name
+          }}</v-list-item-title>
 
-        <v-row no-gutters class="my-3">
-          <v-col>Total base experience: {{ total_base_experience }} </v-col>
-          <v-col>Types involved: {{ types }} </v-col>
-        </v-row>
-        <v-divider></v-divider>
-        <v-row>
-          <Pokemon
-            v-for="pokemon in team.pokemons"
-            :key="pokemon.id"
-            :pokemon="pokemon"
-          />
-        </v-row>
-      </v-list-item-content>
-    </v-list-item>
+          <v-row no-gutters class="my-3">
+            <v-col>Total base experience: {{ total_base_experience }} </v-col>
+            <v-col>Types involved: {{ types }} </v-col>
+          </v-row>
+          <v-divider></v-divider>
+          <v-row>
+            <Pokemon
+              v-for="pokemon in team.pokemons"
+              :key="pokemon.id"
+              :pokemon="pokemon"
+            />
+          </v-row>
+        </v-list-item-content>
+      </v-list-item>
 
-    <v-card-actions>
-      <v-btn text>Edit</v-btn>
-    </v-card-actions>
-  </v-card>
+      <v-card-actions>
+        <router-link :to="{ name: 'edit', params: { id: team._id } }"
+          >EDIT</router-link
+        >
+      </v-card-actions>
+    </v-card>
+  </transition>
 </template>
 
 <script>

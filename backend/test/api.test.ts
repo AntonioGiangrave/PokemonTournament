@@ -16,18 +16,19 @@ describe('Endpoints', () => {
   it('POST valid data return saved document  ', async function() {
     const mock = {
       name: 'TeamTony',
+      create_at: '2020-04-01',
       pokemons: [
         {
           name: 'bulbasaur-test',
           base_experience: 80,
-          images: ["img1', 'img2"],
+          images: 'img1',
           abilities: ['abilitiy1', 'ability2'],
           types: ['type1', 'type2'],
         },
         {
           name: 'ditto-test',
           base_experience: 100,
-          images: ["img3', 'img2"],
+          images: 'img3',
           abilities: ['abilitiy1', 'ability3'],
           types: ['type1', 'type2'],
         },

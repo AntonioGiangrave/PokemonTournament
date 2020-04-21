@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <h1>TeamList</h1>
-    <Team v-for="team in teams" :key="team.id" :team="team" />
+      <Team v-for="team in teams" :key="team.id" :team="team" />
   </v-container>
 </template>
 

@@ -1,10 +1,12 @@
-version: '3.2'
+version: "3.2"
 services:
   redis:
     image: redis:alpine
     container_name: snce-redis
     ports:
-      - '${REDIS_PORT}:${REDIS_PORT}'
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    networks:
+      - snce
 
   mongodb:
     container_name: snce-mongoDB
@@ -16,16 +18,51 @@ services:
       - MONGO_INITDB_DATABASE= Pokemon
     ports:
       - ${MONGO_PORT}:${MONGO_PORT}
-  # webserver:
-  #   image: nginx:alpine
-  #   container_name: snce-docker-webserver
-  #   working_dir: /application
-  #   environment:
-  #     SYMFONY_ENV: ${SYMFONY_ENV}
-  #   volumes:
-  #     - .:/application:cached
-  #     - ./docker-config/nginx/nginx_dev_snce.conf:/etc/nginx/conf.d/default.conf
-  #   ports:
-  #     - '8080:80'
-  #   links:
-  #     - php-fpm
+    networks:
+      - snce
+
+  backend:
+    build: ./backend
+    container_name: snce-backend
+    depends_on:
+      - mongodb
+      - redis
+    working_dir: /application
+    expose:
+      - ${API_PORT}
+    ports:
+      - ${API_PORT}:${API_PORT}
+    volumes:
+      - ./backend/src:/usr/src/app
+      - ./backend/images:/application/images
+    command: npm run start
+    env_file:
+     - .env
+    links:
+      - mongodb
+      - redis
+    networks:
+      - snce
+
+  frontend:
+    image: nginx:alpine
+    container_name: snce-frontend
+    working_dir: /application
+    depends_on:
+      - backend
+    env_file:
+      - .env
+    volumes:
+      - ./frontend:/application
+      - ./backend/images:/application/dist/images
+      - ./docker-config/nginx/nginx_dev_snce.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    links:
+      - backend
+    networks:
+      - snce
+ 
+networks:
+  snce:
+    driver: bridge

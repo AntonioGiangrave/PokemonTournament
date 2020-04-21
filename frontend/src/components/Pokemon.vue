@@ -1,12 +1,10 @@
 <template>
   <v-layout class="pokemon ma-2">
     <v-card>
-      {{pokemon.image}}
       <v-img
         contain
-        src=""
+        :src="img"
         class="grey darken-4"
-        transition="fade-transition"
       ></v-img>
       <div class="d-flex align-center flex-column name py-2">
         {{ pokemon.name }}
@@ -15,18 +13,29 @@
   </v-layout>
 </template>
 
-<style lang="sass">
-.pokemon
-  width : 100px
-  flex: none !important
-
-.name
-  font-size: 12px
+<style>
+.pokemon {
+  width: 100px;
+  flex: none !important;
+}
+.name {
+  font-size: 12px;
+}
 </style>
 <script>
 export default {
   name: "Pokemon",
 
-  props: ["pokemon"]
+  props: ["pokemon"],
+
+  computed: {
+    img() {
+      if (/(http(s?)):\/\//i.test(this.pokemon.image)) {
+        return this.pokemon.image;
+      }
+
+      return `/images/${this.pokemon.image}`;
+    }
+  }
 };
 </script>
